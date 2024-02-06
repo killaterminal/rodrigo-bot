@@ -31,23 +31,36 @@ bot.onText(/\/start/, (msg) => {
     const userName = msg.from.first_name;
 
     const phoneNumber = msg.contact ? msg.contact.phone_number : null;
+    User.findOne({ chatId: chatId })
+        .then((existingUser) => {
+            if (existingUser) {
+                console.log('Пользователь уже существует:', existingUser);
+                return;
+            }
 
-    const newUser = new User({
-        firstName: msg.from.first_name,
-        lastName: msg.from.last_name,
-        username: msg.from.username,
-        chatId: msg.chat.id,
-        phoneNumber: phoneNumber,
-        directed: false
-    });
+            const phoneNumber = msg.contact ? msg.contact.phone_number : null;
 
-    newUser.save()
-        .then((savedUser) => {
-            console.log('User saved:', savedUser);
+            const newUser = new User({
+                firstName: msg.from.first_name,
+                lastName: msg.from.last_name,
+                username: msg.from.username,
+                chatId: msg.chat.id,
+                phoneNumber: phoneNumber,
+                directed: false
+            });
+
+            newUser.save()
+                .then((savedUser) => {
+                    console.log('Пользователь сохранён:', savedUser);
+                })
+                .catch((error) => {
+                    console.error('Ошибка при сохранении пользователя', error);
+                });
         })
         .catch((error) => {
-            console.error('Error saving user:', error);
+            console.error('Ошибка при поиске пользователя:', error);
         });
+
     bot.getMe().then((me) => {
         const botName = me.first_name;
 
