@@ -10,16 +10,6 @@ connection.once('open', () => {
     console.log('Connected to MongoDB');
 });
 
-const userSchema = new mongoose.Schema({
-    firstName: String,
-    lastName: String,
-    username: String,
-    chatId: Number,
-    directed: Boolean
-});
-
-const User = mongoose.model('users', userSchema);
-
 const token = '6702573814:AAHGbtvnTCSuwO7Es82IaRRENfSzHrBMXqw';
 
 const bot = new TelegramBot(token, { polling: true });
@@ -161,7 +151,7 @@ bot.on('callback_query', (callbackQuery) => {
     const chatId = callbackQuery.message.chat.id;
     const action = callbackQuery.data;
 
-    if (query.data === 'escribeme') {
+    if (action === 'escribeme') {
         User.updateOne({ chatId: callbackQuery.message.chat.id }, { directed: true })
             .then(() => {
                 console.log('Directed updated successfully');
@@ -169,8 +159,7 @@ bot.on('callback_query', (callbackQuery) => {
             .catch((error) => {
                 console.error('Error updating directed:', error);
             });
-    }
-    else if (action === 'como_funciona_el_programa') {
+    } else if (action === 'como_funciona_el_programa') {
         comoFuncionaElPrograma(chatId, callbackQuery);
     } else if (action === 'testimonials') {
         comoTestimonios(chatId, callbackQuery);
@@ -183,4 +172,13 @@ const reviewSchema = new mongoose.Schema({
     text: String,
 });
 
+const userSchema = new mongoose.Schema({
+    firstName: String,
+    lastName: String,
+    username: String,
+    chatId: Number,
+    directed: Boolean
+});
+
+const User = mongoose.model('users', userSchema);
 const Reviews = mongoose.model('Review', reviewSchema);
