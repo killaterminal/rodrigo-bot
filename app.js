@@ -37,19 +37,17 @@ bot.onText(/\/start/, (msg) => {
         lastName: msg.from.last_name,
         username: msg.from.username,
         chatId: msg.chat.id,
-        phoneNumber: phoneNumber, 
+        phoneNumber: phoneNumber,
         directed: false
     });
 
     newUser.save()
-    .then((savedUser) => {
-        console.log('User saved:', savedUser);
-        // Ваш код для отправки сообщения пользователю
-    })
-    .catch((error) => {
-        console.error('Error saving user:', error);
-        // Ваш код для обработки ошибки сохранения пользователя
-    });
+        .then((savedUser) => {
+            console.log('User saved:', savedUser);
+        })
+        .catch((error) => {
+            console.error('Error saving user:', error);
+        });
     bot.getMe().then((me) => {
         const botName = me.first_name;
 
@@ -67,7 +65,7 @@ bot.onText(/\/start/, (msg) => {
 
         const keyboard = {
             inline_keyboard: [
-                [{ text: 'Escríbeme ✍️', url: chatLink }],
+                [{ text: 'Escríbeme ✍️', url: chatLink, callback_data: 'escribeme' }],
                 [{ text: 'Cómo funciona el programa', callback_data: 'como_funciona_el_programa' }],
             ],
         };
@@ -150,7 +148,16 @@ bot.on('callback_query', (callbackQuery) => {
     const chatId = callbackQuery.message.chat.id;
     const action = callbackQuery.data;
 
-   if (action === 'como_funciona_el_programa') {
+    if (query.data === 'escribeme') {
+        User.updateOne({ chatId: query.message.chat.id }, { directed: true })
+            .then(() => {
+                console.log('Directed updated successfully');
+            })
+            .catch((error) => {
+                console.error('Error updating directed:', error);
+            });
+    }
+    else if (action === 'como_funciona_el_programa') {
         comoFuncionaElPrograma(chatId, callbackQuery);
     } else if (action === 'testimonials') {
         comoTestimonios(chatId, callbackQuery);
