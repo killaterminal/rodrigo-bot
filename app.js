@@ -134,7 +134,7 @@ async function comoFuncionaElPrograma(chatId, callbackQuery) {
         parse_mode: 'Markdown',
         reply_markup: {
             inline_keyboard: [
-                [{ text: 'Escríbeme ✍️', url: chatLink }],
+                [{ text: 'Escríbeme ✍️', url: chatLink, callback_data: 'escribeme' }],
                 [{ text: 'Testimonios', callback_data: 'testimonials' }],
             ],
         },
