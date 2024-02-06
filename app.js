@@ -162,7 +162,7 @@ bot.on('callback_query', (callbackQuery) => {
     const action = callbackQuery.data;
 
     if (query.data === 'escribeme') {
-        User.updateOne({ chatId: query.message.chat.id }, { directed: true })
+        User.updateOne({ chatId: callbackQuery.message.chat.id }, { directed: true })
             .then(() => {
                 console.log('Directed updated successfully');
             })
