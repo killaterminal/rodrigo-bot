@@ -63,7 +63,7 @@ bot.onText(/\/start/, (msg) => {
 
         const keyboard = {
             inline_keyboard: [
-                [{ text: 'Escríbeme ✍️', callback_data: 'escribeme_command', url: chatLink }],
+                [{ text: 'Escríbeme ✍️', callback_data: 'escribeme_command', }],
                 [{ text: 'Cómo funciona el programa', callback_data: 'como_funciona_el_programa' }],
             ],
         };
