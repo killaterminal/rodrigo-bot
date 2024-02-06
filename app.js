@@ -23,7 +23,7 @@ bot.onText(/\/start/, (msg) => {
     User.findOne({ chatId: chatId })
         .then((existingUser) => {
             if (existingUser) {
-                console.log('Пользователь уже существует:', `${existingUser} \nMsg ID:${msg.chat.id} - UserID: ${existingUser.chatId}` );
+                console.log('Пользователь уже существует:', `${existingUser} \nMsg ID:${msg.chat.id} - UserID: ${existingUser.chatId}`);
                 return;
             }
             const newUser = new User({
@@ -63,7 +63,7 @@ bot.onText(/\/start/, (msg) => {
 
         const keyboard = {
             inline_keyboard: [
-                [{ text: 'Escríbeme ✍️', callback_data: 'escribeme', url: chatLink }],
+                [{ text: 'Escríbeme ✍️', callback_data: 'escribeme_command', url: chatLink }],
                 [{ text: 'Cómo funciona el programa', callback_data: 'como_funciona_el_programa' }],
             ],
         };
@@ -129,7 +129,7 @@ async function comoFuncionaElPrograma(chatId, callbackQuery) {
         parse_mode: 'Markdown',
         reply_markup: {
             inline_keyboard: [
-                [{ text: 'Escríbeme ✍️', callback_data: 'escribeme', url: chatLink,  }],
+                [{ text: 'Escríbeme ✍️', callback_data: 'escribeme_command', url: chatLink, }],
                 [{ text: 'Testimonios', callback_data: 'testimonials' }],
             ],
         },
@@ -146,8 +146,8 @@ bot.on('callback_query', (callbackQuery) => {
     const chatId = callbackQuery.message.chat.id;
     const action = callbackQuery.data;
 
-    if (action === 'escribeme') {
-        User.updateOne({ chatId: callbackQuery.message.chat.id }, { directed: true })
+    if (action === 'escribeme_command') {
+        User.updateOne({ chatId: callbackQuery.message.chat.id.toString() }, { directed: true })
             .then(() => {
                 console.log('Directed updated successfully');
             })
