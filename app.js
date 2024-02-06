@@ -41,8 +41,15 @@ bot.onText(/\/start/, (msg) => {
         directed: false
     });
 
-    newUser.save();
-
+    newUser.save()
+    .then((savedUser) => {
+        console.log('User saved:', savedUser);
+        // Ваш код для отправки сообщения пользователю
+    })
+    .catch((error) => {
+        console.error('Error saving user:', error);
+        // Ваш код для обработки ошибки сохранения пользователя
+    });
     bot.getMe().then((me) => {
         const botName = me.first_name;
 
