@@ -10,6 +10,16 @@ connection.once('open', () => {
     console.log('Connected to MongoDB');
 });
 
+const userSchema = new mongoose.Schema({
+    firstName: String,
+    lastName: String,
+    username: String,
+    chatId: Number,
+    directed: Boolean
+});
+
+const User = mongoose.model('users', userSchema);
+
 const token = '6702573814:AAHGbtvnTCSuwO7Es82IaRRENfSzHrBMXqw';
 
 const bot = new TelegramBot(token, { polling: true });
@@ -19,6 +29,20 @@ const chatLink = `https://t.me/@kipikh`;
 bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
     const userName = msg.from.first_name;
+
+    const phoneNumber = msg.contact ? msg.contact.phone_number : null;
+
+    const newUser = new User({
+        firstName: msg.from.first_name,
+        lastName: msg.from.last_name,
+        username: msg.from.username,
+        chatId: msg.chat.id,
+        phoneNumber: phoneNumber, 
+        directed: false
+    });
+
+    newUser.save();
+
     bot.getMe().then((me) => {
         const botName = me.first_name;
 
