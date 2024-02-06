@@ -148,7 +148,7 @@ bot.on('callback_query', (callbackQuery) => {
 
     console.log(action);
 
-    if (callbackQuery.message.chat.id === 'escribeme_command') {
+    if (action === 'escribeme_command') {
         User.updateOne({ chatId: callbackQuery.message.chat.id.toString() }, { directed: true })
             .then(() => {
                 console.log('Directed updated successfully');
