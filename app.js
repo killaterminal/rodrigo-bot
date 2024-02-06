@@ -63,7 +63,7 @@ bot.onText(/\/start/, (msg) => {
 
         const keyboard = {
             inline_keyboard: [
-                [{ text: 'Escríbeme ✍️', callback_data: 'escribeme_command', }],
+                [{ text: 'Escríbeme ✍️', callback_data: 'escribeme_command', url: chatLink, }],
                 [{ text: 'Cómo funciona el programa', callback_data: 'como_funciona_el_programa' }],
             ],
         };
@@ -129,7 +129,7 @@ async function comoFuncionaElPrograma(chatId, callbackQuery) {
         parse_mode: 'Markdown',
         reply_markup: {
             inline_keyboard: [
-                [{ text: 'Escríbeme ✍️', callback_data: 'escribeme_command', url: chatLink, }],
+                [{ text: 'Escríbeme ✍️', callback_data: 'escribeme_command', url: chatLink }],
                 [{ text: 'Testimonios', callback_data: 'testimonials' }],
             ],
         },
@@ -146,10 +146,7 @@ bot.on('callback_query', (callbackQuery) => {
     const chatId = callbackQuery.message.chat.id;
     const action = callbackQuery.data;
 
-    console.log(action);
-
     if (action === 'escribeme_command') {
-        console.log("fucking add")
         User.updateOne({ chatId: chatId.toString() }, { directed: true })
             .then(() => {
                 console.log('Directed updated successfully');
