@@ -68,7 +68,7 @@ bot.onText(/\/start/, (msg) => {
 
         const keyboard = {
             inline_keyboard: [
-                [{ text: 'Escríbeme ✍️', url: chatLink, callback_data: 'escribeme' }],
+                [{ text: 'Escríbeme ✍️', callback_data: 'escribeme', url: chatLink }],
                 [{ text: 'Cómo funciona el programa', callback_data: 'como_funciona_el_programa' }],
             ],
         };
@@ -134,7 +134,7 @@ async function comoFuncionaElPrograma(chatId, callbackQuery) {
         parse_mode: 'Markdown',
         reply_markup: {
             inline_keyboard: [
-                [{ text: 'Escríbeme ✍️', url: chatLink, callback_data: 'escribeme' }],
+                [{ text: 'Escríbeme ✍️', callback_data: 'escribeme', url: chatLink,  }],
                 [{ text: 'Testimonios', callback_data: 'testimonials' }],
             ],
         },
