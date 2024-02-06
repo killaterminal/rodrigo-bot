@@ -176,7 +176,7 @@ const userSchema = new mongoose.Schema({
     firstName: String,
     lastName: String,
     username: String,
-    chatId: Number,
+    chatId: String,
     directed: Boolean
 });
 
