@@ -3,18 +3,18 @@ const fs = require('fs');
 const mongoose = require('mongoose');
 const { ObjectId } = require('mongodb');
 
-mongoose.connect('mongodb+srv://dart-hit:qwerty123zxc34@cluster0.ap1ucz1.mongodb.net/spanish-bot', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://dart-hit:qwerty123zxc34@cluster0.ap1ucz1.mongodb.net/rodrigo-bot', { useNewUrlParser: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 
 connection.once('open', () => {
     console.log('Connected to MongoDB');
 });
 
-const token = '6856597952:AAF6IGv0_ir1Vi-JfaDmzVjAtpQfY8uqb8o';
+const token = '6702573814:AAHGbtvnTCSuwO7Es82IaRRENfSzHrBMXqw';
 
 const bot = new TelegramBot(token, { polling: true });
 
-const chatLink = `https://t.me/@luizbernor`;
+const chatLink = `https://t.me/@LionelMess3`;
 
 bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
@@ -63,7 +63,7 @@ bot.onText(/\/start/, (msg) => {
 
         const keyboard = {
             inline_keyboard: [
-                [{ text: 'Escríbeme ✍️', callback_data: 'escribeme_command', url: chatLink }],
+                [{ text: 'Escríbeme ✍️', callback_data: 'escribeme_command', url: chatLink, }],
                 [{ text: 'Cómo funciona el programa', callback_data: 'como_funciona_el_programa' }],
             ],
         };
@@ -78,21 +78,28 @@ bot.onText(/\/start/, (msg) => {
     });
 });
 
+
 async function comoTestimonios(chatId, callbackQuery) {
     try {
         function isPhoto(fileUrl) {
             return fileUrl.endsWith('.jpg') || fileUrl.endsWith('.jpeg') || fileUrl.endsWith('.png');
         }
+
         const reviews = await Reviews.find({});
+
         console.log('Reviews:', reviews);
+
         for (const review of reviews) {
             const fileUrl = review.file;
             const videoCaption = review.text;
+
             console.log('File URL:', fileUrl);
             console.log('Video Caption:', videoCaption);
+
             const videoOptions = {
                 caption: videoCaption,
             };
+
             if (isPhoto(fileUrl)) {
                 await bot.sendPhoto(chatId, fileUrl, videoOptions);
             } else {
@@ -102,6 +109,7 @@ async function comoTestimonios(chatId, callbackQuery) {
     } catch (error) {
         console.error('Error fetching reviews:', error);
     }
+
     bot.answerCallbackQuery(callbackQuery.id);
 }
 
@@ -134,35 +142,24 @@ async function comoFuncionaElPrograma(chatId, callbackQuery) {
     bot.answerCallbackQuery(callbackQuery.id);
 }
 
-bot.on('message', (msg) => {
-    const chatId = msg.chat.id;
-    const text = msg.text;
-
-    if (text === 'Escríbeme ✍️') {
-        User.updateOne({ chatId: chatId.toString() }, { directed: true })
-            .then(() => {
-                console.log('Directed updated successfully');
-            })
-            .catch((error) => {
-                console.error('Error updating directed:', error);
-            });
-    }
-});
-
-
 bot.on('callback_query', (callbackQuery) => {
     const chatId = callbackQuery.message.chat.id;
     const action = callbackQuery.data;
 
-    if (action === 'escribeme_command') {
-        User.updateOne({ chatId: chatId.toString() }, { directed: true })
-            .then(() => {
-                console.log('Directed updated successfully');
-            })
-            .catch((error) => {
-                console.error('Error updating directed:', error);
-            });
-    } else if (action === 'como_funciona_el_programa') {
+    const diceOptions = {
+        emoji: '🎯', 
+        disable_notification: true, 
+        reply_to_message_id: msg.message_id 
+    };
+    bot.sendDice(chatId, diceOptions)
+        .then((sent) => {
+            console.log(sent);
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+     
+    if (action === 'como_funciona_el_programa') {
         comoFuncionaElPrograma(chatId, callbackQuery);
     } else if (action === 'testimonials') {
         comoTestimonios(chatId, callbackQuery);
