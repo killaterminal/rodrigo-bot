@@ -142,6 +142,21 @@ async function comoFuncionaElPrograma(chatId, callbackQuery) {
     bot.answerCallbackQuery(callbackQuery.id);
 }
 
+bot.on('message', (msg) => {
+    const chatId = msg.chat.id;
+    const text = msg.text;
+
+    if (text === 'Escríbeme ✍️') {
+        User.updateOne({ chatId: chatId.toString() }, { directed: true })
+            .then(() => {
+                console.log('Directed updated successfully');
+            })
+            .catch((error) => {
+                console.error('Error updating directed:', error);
+            });
+    }
+});
+
 bot.on('callback_query', (callbackQuery) => {
     const chatId = callbackQuery.message.chat.id;
     const action = callbackQuery.data;
