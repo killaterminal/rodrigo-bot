@@ -20,22 +20,17 @@ bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
     const userName = msg.from.first_name;
 
-    const phoneNumber = msg.contact ? msg.contact.phone_number : null;
     User.findOne({ chatId: chatId })
         .then((existingUser) => {
             if (existingUser) {
-                console.log('Пользователь уже существует:', existingUser);
+                console.log('Пользователь уже существует:', `${existingUser} \nMsg ID:${msg.chat.id} - UserID: ${existingUser.chatId}` );
                 return;
             }
-
-            const phoneNumber = msg.contact ? msg.contact.phone_number : null;
-
             const newUser = new User({
                 firstName: msg.from.first_name,
                 lastName: msg.from.last_name,
                 username: msg.from.username,
                 chatId: msg.chat.id,
-                phoneNumber: phoneNumber,
                 directed: false
             });
 
