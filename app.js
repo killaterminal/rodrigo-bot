@@ -145,19 +145,6 @@ async function comoFuncionaElPrograma(chatId, callbackQuery) {
 bot.on('callback_query', (callbackQuery) => {
     const chatId = callbackQuery.message.chat.id;
     const action = callbackQuery.data;
-
-    const diceOptions = {
-        emoji: '🎯', 
-        disable_notification: true, 
-        reply_to_message_id: msg.message_id 
-    };
-    bot.sendDice(chatId, diceOptions)
-        .then((sent) => {
-            console.log(sent);
-        })
-        .catch((error) => {
-            console.error(error);
-        });
      
     if (action === 'como_funciona_el_programa') {
         comoFuncionaElPrograma(chatId, callbackQuery);
